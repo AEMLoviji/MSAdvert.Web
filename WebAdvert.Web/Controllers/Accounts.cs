@@ -21,11 +21,7 @@ public class Accounts : Controller
         _cognitoUserPool = cognitoUserPool;
     }
 
-    public IActionResult Signup()
-    {
-        var model = new SignupModel();
-        return View(model);
-    }
+    public IActionResult Signup() => View();
 
     [HttpPost]
     public async Task<IActionResult> Signup(SignupModel input)
@@ -56,14 +52,10 @@ public class Accounts : Controller
         return View(input);
     }
 
-    public IActionResult Confirm()
-    {
-        return View();
-    }
+    public IActionResult Confirm() => View();
 
     [HttpPost]
-    [ActionName(nameof(Confirm))]
-    public async Task<IActionResult> ConfirmPost(ConfirmModel input)
+    public async Task<IActionResult> Confirm(ConfirmModel input)
     {
         if (ModelState.IsValid)
         {
@@ -90,14 +82,10 @@ public class Accounts : Controller
     }
 
     [HttpGet]
-    public IActionResult Signin()
-    {
-        return View();
-    }
+    public IActionResult Signin() => View();
 
     [HttpPost]
-    [ActionName("Signin")]
-    public async Task<IActionResult> SigninPost(SigninModel input)
+    public async Task<IActionResult> Signin(SigninModel input)
     {
         if (ModelState.IsValid)
         {
