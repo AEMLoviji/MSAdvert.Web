@@ -1,4 +1,4 @@
-namespace WebAdvert.Web.Models
+namespace AdvertWeb.Models
 {
     public class ErrorViewModel
     {

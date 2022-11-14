@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using WebAdvert.Web.Models;
+using AdvertWeb.Models;
 
-namespace WebAdvert.Web.Controllers;
+namespace AdvertWeb.Controllers;
 
 public class HomeController : Controller
 {

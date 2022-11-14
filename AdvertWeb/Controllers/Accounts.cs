@@ -2,9 +2,9 @@
 using Amazon.Extensions.CognitoAuthentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using WebAdvert.Web.Models.Accounts;
+using AdvertWeb.Models.Accounts;
 
-namespace WebAdvert.Web.Controllers;
+namespace AdvertWeb.Controllers;
 
 public class Accounts : Controller
 {
