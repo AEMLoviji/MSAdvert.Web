@@ -3,16 +3,17 @@ using Amazon.Extensions.CognitoAuthentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using AdvertWeb.Models.Accounts;
+using AdvertWeb.Models.AdvertManagement;
 
 namespace AdvertWeb.Controllers;
 
-public class Accounts : Controller
+public class AccountsController : Controller
 {
     private readonly CognitoSignInManager<CognitoUser> _signInManager;
     private readonly CognitoUserManager<CognitoUser> _userManager;
     private readonly CognitoUserPool _cognitoUserPool;
 
-    public Accounts(SignInManager<CognitoUser> signInManager,
+    public AccountsController(SignInManager<CognitoUser> signInManager,
         UserManager<CognitoUser> userManager,
         CognitoUserPool cognitoUserPool)
     {

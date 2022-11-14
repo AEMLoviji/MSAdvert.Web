@@ -1,7 +1,10 @@
+using AdvertWeb.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddTransient<IFileUploader, S3FileUploader>();
 
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {
@@ -9,13 +12,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     options.MinimumSameSitePolicy = SameSiteMode.None;
 });
 
-builder.Services.AddCognitoIdentity(cfg =>
-{
-    //cfg.Password = new Microsoft.AspNetCore.Identity.PasswordOptions
-    //{
-    //    RequiredLength = 6,
-    //};
-});
+builder.Services.AddCognitoIdentity();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
