@@ -1,12 +1,25 @@
 using AdvertWeb.ServiceClients.AdvertApiClient;
 using AdvertWeb.Services;
+using Polly;
+using Polly.Extensions.Http;
+using System.Net;
+static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy() => HttpPolicyExtensions
+    .HandleTransientHttpError()
+    .OrResult(msg => msg.StatusCode == HttpStatusCode.NotFound)
+    .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+
+static IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPatternPolicy() => HttpPolicyExtensions
+    .HandleTransientHttpError()
+    .CircuitBreakerAsync(3, TimeSpan.FromSeconds(30));
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IFileUploader, S3FileUploader>();
-builder.Services.AddHttpClient<IAdvertApiClient, AdvertApiClient>();
+builder.Services.AddHttpClient<IAdvertApiClient, AdvertApiClient>()
+    .AddPolicyHandler(GetRetryPolicy())
+    .AddPolicyHandler(GetCircuitBreakerPatternPolicy());
 
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {

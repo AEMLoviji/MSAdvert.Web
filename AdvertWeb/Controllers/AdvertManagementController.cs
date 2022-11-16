@@ -1,18 +1,25 @@
 ﻿using AdvertWeb.Models.AdvertManagement;
+using AdvertWeb.ServiceClients.AdvertApiClient;
+using AdvertWeb.ServiceClients.AdvertApiClient.Contracts;
 using AdvertWeb.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using System.IO;
 
 namespace AdvertWeb.Controllers;
 
 public class AdvertManagementController : Controller
 {
     private readonly IFileUploader _fileUploader;
+    private readonly IAdvertApiClient _advertApiClient;
+    private readonly IMapper _mapper;
 
-    public AdvertManagementController(IFileUploader fileUploader)
+    public AdvertManagementController(IFileUploader fileUploader,
+        IAdvertApiClient advertApiClient,
+        IMapper mapper)
     {
         _fileUploader = fileUploader;
+        _advertApiClient = advertApiClient;
+        _mapper = mapper;
     }
 
     public IActionResult Create() => View();
@@ -22,18 +29,17 @@ public class AdvertManagementController : Controller
     {
         if (ModelState.IsValid)
         {
-            // TODO: get ID from AdvertAPI call.
-            var id = new Random().Next().ToString();
+            var createAdvertRequest = _mapper.Map<CreateAdvertRequest>(input);
 
-            var filePath = string.Empty;
+            var createdAdvert = await _advertApiClient.CreateAsync(createAdvertRequest);
+
+            var createdAdvertId = createdAdvert.Id;
             if (imageFile != null)
             {
                 var fileName = string.IsNullOrEmpty(imageFile.FileName)
-                    ? id
-                    : Path.GetFileName(imageFile.FileName);
+                    ? createdAdvertId : Path.GetFileName(imageFile.FileName);
 
-                filePath = $"{id}/{fileName}";
-
+                string? filePath = $"{createdAdvertId}/{fileName}";
                 try
                 {
                     using var readStream = imageFile.OpenReadStream();
@@ -43,14 +49,34 @@ public class AdvertManagementController : Controller
                     {
                         throw new Exception("Could not upload the image to file repository.");
                     }
+
+                    ConfirmAdvertRequest confirmAdvertRequest = new()
+                    {
+                        Id = createdAdvertId,
+                        FilePath = filePath,
+                        Status = AdvertApi.Models.AdvertStatus.Active
+                    };
+
+                    var confirmed = await _advertApiClient.ConfirmAsync(confirmAdvertRequest);
+                    if (!confirmed)
+                    {
+                        throw new Exception($"Cannot confirm advert of id = {createdAdvertId}");
+                    }
+
+                    return RedirectToAction("Index", "Home");
                 }
                 catch (Exception e)
                 {
+                    ConfirmAdvertRequest confirmAdvertRequest = new()
+                    {
+                        Id = createdAdvertId,
+                        FilePath = filePath,
+                        Status = AdvertApi.Models.AdvertStatus.Pending
+                    };
 
+                    await _advertApiClient.ConfirmAsync(confirmAdvertRequest);
                 }
             }
-
-            return RedirectToAction("Index", "Home");
         }
 
         return View(input);
