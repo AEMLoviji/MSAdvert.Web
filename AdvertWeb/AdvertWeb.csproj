@@ -8,10 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AdvertApi.Models.EA" Version="1.0.1" />
     <PackageReference Include="Amazon.AspNetCore.Identity.Cognito" Version="3.0.0" />
     <PackageReference Include="Amazon.Extensions.CognitoAuthentication" Version="2.2.3" />
     <PackageReference Include="AutoMapper" Version="12.0.0" />
-    <PackageReference Include="AWSSDK.S3" Version="3.7.101.16" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.101.17" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.0" />
   </ItemGroup>
 
