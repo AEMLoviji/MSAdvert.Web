@@ -8,6 +8,6 @@ public class AppMapperProfile : Profile
 {
     public AppMapperProfile()
     {
-        CreateMap<CreateAdvertRequest, CreateAdvertViewModel>().ReverseMap();
+        CreateMap<CreateAdvertRequestModel, CreateAdvertViewModel>().ReverseMap();
     }
 }

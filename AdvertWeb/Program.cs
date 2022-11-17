@@ -3,6 +3,8 @@ using AdvertWeb.Services;
 using Polly;
 using Polly.Extensions.Http;
 using System.Net;
+using AutoMapper;
+
 static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy() => HttpPolicyExtensions
     .HandleTransientHttpError()
     .OrResult(msg => msg.StatusCode == HttpStatusCode.NotFound)
@@ -16,6 +18,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddAutoMapper(typeof(Program));
+
 builder.Services.AddTransient<IFileUploader, S3FileUploader>();
 builder.Services.AddHttpClient<IAdvertApiClient, AdvertApiClient>()
     .AddPolicyHandler(GetRetryPolicy())

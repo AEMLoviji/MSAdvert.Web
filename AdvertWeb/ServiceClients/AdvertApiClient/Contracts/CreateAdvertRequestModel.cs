@@ -1,6 +1,6 @@
 ﻿namespace AdvertWeb.ServiceClients.AdvertApiClient.Contracts;
 
-public class CreateAdvertRequest
+public class CreateAdvertRequestModel
 {
     public string Title { get; set; }
 

@@ -4,7 +4,7 @@ namespace AdvertWeb.ServiceClients.AdvertApiClient;
 
 public interface IAdvertApiClient
 {
-    Task<CreateAdvertResponse> CreateAsync(CreateAdvertRequest request);
+    Task<CreateAdvertResponseModel> CreateAsync(CreateAdvertRequestModel request);
 
-    Task<bool> ConfirmAsync(ConfirmAdvertRequest request);
+    Task<bool> ConfirmAsync(ConfirmAdvertRequestModel request);
 }

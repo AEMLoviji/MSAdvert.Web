@@ -29,7 +29,7 @@ public class AdvertManagementController : Controller
     {
         if (ModelState.IsValid)
         {
-            var createAdvertRequest = _mapper.Map<CreateAdvertRequest>(input);
+            var createAdvertRequest = _mapper.Map<CreateAdvertRequestModel>(input);
 
             var createdAdvert = await _advertApiClient.CreateAsync(createAdvertRequest);
 
@@ -50,7 +50,7 @@ public class AdvertManagementController : Controller
                         throw new Exception("Could not upload the image to file repository.");
                     }
 
-                    ConfirmAdvertRequest confirmAdvertRequest = new()
+                    ConfirmAdvertRequestModel confirmAdvertRequest = new()
                     {
                         Id = createdAdvertId,
                         FilePath = filePath,
@@ -67,7 +67,7 @@ public class AdvertManagementController : Controller
                 }
                 catch (Exception e)
                 {
-                    ConfirmAdvertRequest confirmAdvertRequest = new()
+                    ConfirmAdvertRequestModel confirmAdvertRequest = new()
                     {
                         Id = createdAdvertId,
                         FilePath = filePath,

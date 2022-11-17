@@ -1,4 +1,5 @@
-﻿using AdvertWeb.ServiceClients.AdvertApiClient.Contracts;
+﻿using AdvertApi.Models;
+using AdvertWeb.ServiceClients.AdvertApiClient.Contracts;
 using AutoMapper;
 using System.Net;
 
@@ -18,22 +19,22 @@ public class AdvertApiClient : IAdvertApiClient
         _baseAddress = configuration.GetSection("AdvertApi").GetValue<string>("BaseUrl");
     }
 
-    public async Task<CreateAdvertResponse> CreateAsync(CreateAdvertRequest model)
+    public async Task<CreateAdvertResponseModel> CreateAsync(CreateAdvertRequestModel model)
     {
-        var advertApiRequest = _mapper.Map<AdvertApi.Models.CreateAdvertRequest>(model);
+        var advertApiRequest = _mapper.Map<CreateAdvertRequest>(model);
 
         var response = await _client.PostAsJsonAsync(
             new Uri($"{_baseAddress}/create"),
             advertApiRequest);
 
-        var createdAdvert = await response.Content.ReadFromJsonAsync<AdvertApi.Models.CreateAdvertResponse>();
+        var createdAdvert = await response.Content.ReadFromJsonAsync<CreateAdvertResponse>();
 
-        return _mapper.Map<CreateAdvertResponse>(createdAdvert);
+        return _mapper.Map<CreateAdvertResponseModel>(createdAdvert);
     }
 
-    public async Task<bool> ConfirmAsync(ConfirmAdvertRequest request)
+    public async Task<bool> ConfirmAsync(ConfirmAdvertRequestModel request)
     {
-        var advertApiRequest = _mapper.Map<AdvertApi.Models.ConfirmAdvertRequest>(request);
+        var advertApiRequest = _mapper.Map<ConfirmAdvertRequest>(request);
 
         var response = await _client.PutAsJsonAsync(
             new Uri($"{_baseAddress}/confirm"),

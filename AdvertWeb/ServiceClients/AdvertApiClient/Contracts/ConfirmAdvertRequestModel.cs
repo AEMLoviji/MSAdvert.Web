@@ -2,7 +2,7 @@
 
 namespace AdvertWeb.ServiceClients.AdvertApiClient.Contracts;
 
-public class ConfirmAdvertRequest
+public class ConfirmAdvertRequestModel
 {
     public string Id { get; set; }
     public string FilePath { get; set; }
